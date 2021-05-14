@@ -1,0 +1,7 @@
+{% extends 'APYDataGridBundle::blocks.html.twig' %}
+
+{% use 'KMGiCommonBundle:Grid:overrided.html.twig' %}
+
+{% block grid_render_search_block %}
+    {{ grid_search(grid, 'KMGiCommonBundle:Grid:simple.html.twig') }}
+{% endblock grid_render_search_block %}

@@ -1,0 +1,61 @@
+/*------------------------------------------------------------------
+
+Layout: Masthead
+
+------------------------------------------------------------------- */
+#masthead {
+  width: 100%;
+/*  padding: 20px 0;*/
+/*  color: #333333;
+  background-color: #f8f8f8;
+  background-image: -moz-linear-gradient(top, #ffffff, #ededed);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ededed));
+  background-image: -webkit-linear-gradient(top, #ffffff, #ededed);
+  background-image: -o-linear-gradient(top, #ffffff, #ededed);
+  background-image: linear-gradient(to bottom, #ffffff, #ededed);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffededed', GradientType=0);
+  border-bottom: 1px solid #c9c9c9;
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  text-shadow: 1px 1px 2px #FFF;*/
+}
+#masthead h1,
+#masthead h2,
+#masthead h3,
+#masthead h4,
+#masthead h5,
+#masthead h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+#masthead p {
+  margin-bottom: 0;
+  font-size: 13px;
+}
+#masthead .masthead-pad {
+  display: table;
+  width: 100%;
+}
+#masthead .masthead-pad .masthead-icon {
+  position: relative;
+  display: table-cell;
+  vertical-align: top;
+  width: 65px;
+  font-size: 50px;
+  font-weight: 400;
+}
+#masthead .masthead-pad .masthead-icon i {
+  position: relative;
+  top: 15px;
+}
+#masthead .masthead-pad .masthead-text {
+  display: table-cell;
+  padding: 7px 0px;
+  vertical-align: top;
+}
+#masthead h2 {
+    line-height:30px
+}

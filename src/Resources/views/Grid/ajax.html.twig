@@ -1,0 +1,38 @@
+{% extends 'APYDataGridBundle::blocks_js.jquery.html.twig' %}
+
+{% use 'KMGiCommonBundle:Grid:overrided.html.twig' %}
+
+{% block grid_render_search_block %}
+    {{ grid_search(grid, 'KMGiCommonBundle:Grid:ajax.html.twig') }}
+{% endblock grid_render_search_block %}
+
+{% block grid_class_block %}js-grid-ajax{% endblock grid_class_block %}
+
+{% block grid_session_messages %}
+    <div id="grid_flash_messages">
+        {% set has_messages = false %}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            {% set has_messages = true %}
+            <div class="alert alert-success">
+                {{ flashMessage|trans }}
+            </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            {% set has_messages = true %}
+            <div class="alert alert-error">
+                {{ flashMessage|trans }}
+            </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('warning') %}
+            {% set has_messages = true %}
+            <div class="alert alert-warning">
+                {{ flashMessage|trans }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock grid_session_messages %}
+
+{% block grid %}
+    {{ grid_session_messages(grid) }}
+    {{ parent() }}
+{% endblock grid %}

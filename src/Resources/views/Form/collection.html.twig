@@ -1,0 +1,90 @@
+{% extends 'KMGiCommonBundle:Form:fields.html.twig' %}
+
+{% block collection_widget %}
+{% spaceless %}
+    {% if prototype is defined %}
+        {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+    {% endif %}
+    {% if form.vars.allow_add and form.vars.show_add_button %}
+        <div class="clearfix">
+            <div class="btn-toolbar pull-right">
+                <button class="btn {{ form.vars.add_button_class }}"><span class="icon-{{ form.vars.add_button_icon }}"></span> {{ form.vars.add_button_label | trans }}</button>
+            </div>
+        </div>
+    {% endif %}
+    <div {{ block('widget_container_attributes') }}>
+        {{ block('form_rows') }}
+        <div class="no_records collection_item"{% if(form | length > 0) %} style="display: none;"{% endif %}>{{ form.vars.no_data_message | trans }}</div>
+    </div>
+    <script type="text/javascript">
+        {% if form.vars.allow_add %}
+            var {{ id }}_count = 0;
+        {% endif %}
+        jQuery(document).ready(function(){
+            {% if form.vars.allow_add %}
+                {{ id }}_count = $('#{{ id }} div.collection_item').length;
+                $('.{{ add_button_class }}').on('click', function(e){
+                    e.preventDefault();
+                    $('.nav-tabs a[href="#' + $('#{{ id }}').closest('div.tab-pane').attr('id') + '"]').tab('show');
+                    var prototype = $('#{{ id }}').data('prototype');
+                    var newForm = prototype.replace(/__name__/g, {{ id }}_count++);
+                    $('#{{ id }} .no_records').hide();
+                    $('#{{ id }}').append(newForm);
+                });
+            {% endif %}
+            {% if form.vars.allow_delete %}
+                $('#{{ id }}').on('click', 'button.close', function(event){
+                    event.preventDefault();
+                    $(this).closest('div.collection_item').fadeOut('slow', function(){
+                        $(this).remove();
+                        if($('#{{ id }} div.collection_item:not(.no_records)').length == 0)
+                        {
+                            $('#{{ id }} .no_records').show();
+                        }
+                    });
+                });
+            {% endif %}
+        });
+    </script>
+{% endspaceless %}
+{% endblock collection_widget %}
+
+{% block form_row %}
+{% spaceless %}
+    {% if not form.parent.vars.show_add_button | default(null) is sameas(null) %}
+        <div class="col-sm-6 collection_item">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% if not value is empty %}
+                        <span class="badge pull-left">{{ form.vars.name + 1 }}</span>
+                    {% endif %}
+                    {% if form.parent.vars.allow_delete %}
+                        <button class="close" type="button" title="{{ 'Delete'|trans }}">&times;</button>
+                    {% endif %}
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-body">
+                    {% if compound %}
+                        <div class="caption" {{ block('widget_container_attributes') }}>
+                            {{ form_widget(form) }}
+                        </div>
+                    {% else %}
+                        <div class="caption">
+                            {{ form_label(form) }}
+                            {{ form_widget(form) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="form-group">
+            {{ form_label(form) }}
+            <div class="col-sm-10">
+                {% set attr = form.vars.attr | merge({'class': ' form-control'|trim}) %}
+                {{ form_widget(form, {'attr': attr}) }}
+            </div>
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_row %}

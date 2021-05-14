@@ -1,0 +1,9 @@
+        <div class="btn-group pull-right">
+{% if ('edit' in actions) and (not hide_edit) %}
+            <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-ok"></span> {{ "{{ 'Save'|trans }}" }}</button>
+{% endif %}
+{% if ('delete' in actions) and (not hide_delete) %}
+            <a href="{{ "{{ path('"~ route_name_prefix ~"_delete', { 'id': entity.id }) }}" }}" class="btn btn-warning" onclick="return confirm('{{ "{{ 'Delete record?'|trans }}" }}')"><span class="glyphicon glyphicon-remove"></span>{{ "{{ 'Delete'|trans }}" }}</a>
+{% endif %}
+            <a class="btn btn-default" href="{{ "{{ path('"~ route_name_prefix ~"') }}" }}"><span class="glyphicon glyphicon-chevron-left"></span> {{ "{{ 'Back to the list'|trans }}" }}</a>
+        </div>

@@ -1,0 +1,41 @@
+{% extends 'skeleton/crud/controller.php.twig' %}
+
+{% block use_statements %}
+{% if 'new' in actions or 'edit' in actions or 'delete' in actions %}
+use Symfony\Component\HttpFoundation\Request;
+{%- endif %}
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% if 'annotation' == format -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+{%- endif %}
+
+use {{ namespace }}\Entity\{{ real_entity }};
+{% if 'new' in actions or 'edit' in actions %}
+use {{ namespace }}\Form\{{ real_entity }}Type;
+{% endif %}
+{%- if 'index' in actions -%}
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Source\Entity;
+{% endif %}
+{% endblock use_statements %}
+
+{%- block class_body %}
+    {%- if 'index' in actions %}
+        {%- include 'crud/actions/index.php.twig' %}
+    {%- endif %}
+
+    {%- if 'new' in actions %}
+        {%- include 'crud/actions/new.php.twig' %}
+    {%- endif %}
+
+    {%- if 'edit' in actions %}
+        {%- include 'crud/actions/edit.php.twig' %}
+    {%- endif %}
+
+    {%- if 'delete' in actions %}
+        {%- include 'crud/actions/delete.php.twig' %}
+    {%- endif %}
+{% endblock class_body %}

@@ -1,0 +1,19 @@
+{% block extends %}
+{{ "{% extends '" ~ bundle ~ ":" ~ layout_subfolder ~ ":" ~ layout_filename ~ "' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block body %}" }}
+{{ '{{ form_start(edit_form) }}' }}
+    <div class="head-content">
+{% set hide_edit, hide_delete = false, false %}
+{% include 'crud/views/others/record_actions.html.twig.twig' %}
+        <div class="page-header">
+            <h3>{{ "{{ '"~ real_entity ~" edit'|trans }}" }}</h3>
+        </div>
+    </div>
+
+{{ '{{ form_widget(edit_form) }}' }}
+{{ '{{ form_end(edit_form) }}' }}
+{{ "{% endblock %}" }}
+{% endblock body %}

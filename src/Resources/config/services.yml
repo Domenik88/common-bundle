@@ -1,0 +1,132 @@
+services:
+    kmgi.common_bundle.media_namer:
+        class: KMGi\CommonBundle\Extensions\VichUploader\MediaNamer
+#event listeners:
+    kmgi.common_bundle.locale.listener:
+        class: KMGi\CommonBundle\EventListener\LocaleListener
+        arguments: ['%locale%']
+        tags:
+            - { name: kernel.event_listener, method: onKernelRequest, event: kernel.request }
+#twig services:
+    kmgi.common_bundle.twig.cut_extension:
+        class: KMGi\CommonBundle\Extensions\Twig\CutExtension
+        tags:
+            - { name: 'twig.extension' }
+    kmgi.common_bundle.twig.zend_json_encode:
+        class: KMGi\CommonBundle\Extensions\Twig\ZendJsonEncode
+        tags:
+            - { name: 'twig.extension' }
+    kmgi.common_bundle.twig.sha1_extension:
+        class: KMGi\CommonBundle\Extensions\Twig\Sha1Extension
+        tags:
+            - { name: 'twig.extension' }
+#form types:
+    kmgi.common_bundle.form.tags:
+        class: KMGi\CommonBundle\Form\Type\TagsType
+        arguments: ['@doctrine.orm.entity_manager', '@property_accessor', '@translator', '@router', '@kmgi.common_bundle.twig.zend_json_encode']
+        tags:
+            - { name: form.type, alias: tags }
+    kmgi.common_bundle.form.ajax_choice:
+        class: KMGi\CommonBundle\Form\Type\AjaxChoiceType
+        arguments: ['@doctrine.orm.entity_manager', '@property_accessor', '@router']
+        tags:
+            - { name: form.type, alias: ajax_choice }
+    kmgi.common_bundle.form.color:
+        class: KMGi\CommonBundle\Form\Type\ColorType
+        tags:
+            - { name: form.type, alias: color }
+    kmgi.common_bundle.form.tree_entity:
+        class: KMGi\CommonBundle\Form\Type\TreeEntityType
+        arguments: ['@property_accessor']
+        tags:
+            - { name: form.type, alias: tree_entity }
+    kmgi.common_bundle.form.tabbed_form:
+        class: KMGi\CommonBundle\Form\Type\TabbedFormType
+        tags:
+            - { name: form.type, alias: tabbed_form }
+    kmgi.common_bundle.form.multi_collection:
+        class: KMGi\CommonBundle\Form\Type\MultiCollectionType
+        arguments: ['@property_accessor']
+        tags:
+            - { name: form.type, alias: multi_collection }
+    kmgi.common_bundle.form.include_twig:
+        class: KMGi\CommonBundle\Form\Type\IncludeTwigType
+        tags:
+            - { name: form.type, alias: include_twig }
+#form extensions:
+    kmgi.common_bundle.choice.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\ChoiceTypeExtension
+        arguments: ['@translator', '@kmgi.common_bundle.twig.zend_json_encode']
+        tags:
+            - { name: form.type_extension, alias: choice }
+    kmgi.common_bundle.entity.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\EntityTypeExtension
+        arguments: ['@property_accessor', '@router']
+        tags:
+            - { name: form.type_extension, alias: entity }
+    kmgi.common_bundle.hint_form.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\HintFormTypeExtension
+        tags:
+            - { name: form.type_extension, alias: form }
+    kmgi.common_bundle.localed_date.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\LocaleDateTypeExtension
+        arguments: ['@kmgi.common_bundle.locale.listener']
+        tags:
+            - {name: form.type_extension, alias: date}
+    kmgi.common_bundle.localed_datetime.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\LocaleDateTimeTypeExtension
+        arguments: ['@kmgi.common_bundle.locale.listener']
+        tags:
+            - {name: form.type_extension, alias: datetime}
+    kmgi.common_bundle.localed_time.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\LocaleTimeTypeExtension
+        arguments: ['@kmgi.common_bundle.locale.listener']
+        tags:
+            - {name: form.type_extension, alias: time}
+    kmgi.common_bundle.collection.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\CollectionTypeExtension
+        tags:
+            - {name: form.type_extension, alias: collection}
+    kmgi.common_bundle.vich_file.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\VichFileTypeExtension
+        arguments: ['@templating.helper.assets', '@?vich_uploader.storage', '@?vich_uploader.templating.helper.uploader_helper', '@?imagine.cache.path.resolver']
+        scope: request
+        tags:
+            - {name: form.type_extension, alias: vich_file}
+    kmgi.common_bundle.textarea.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\TextareaTypeExtension
+        tags:
+            - {name: form.type_extension, alias: textarea}
+    kmgi.common_bundle.bootstrap_panel.form_extension:
+        class: KMGi\CommonBundle\Form\Extension\BootstrapPanelFormTypeExtension
+        tags:
+            - {name: form.type_extension, alias: form}
+#grid columns:
+    kmgi.common_bundle.grid.column.checkbox:
+        class: KMGi\CommonBundle\Grid\Column\CheckboxColumn
+        public: false
+        tags:
+            - {name: grid.column.extension}
+    kmgi.common_bundle.grid.column.image:
+        class: KMGi\CommonBundle\Grid\Column\ImageColumn
+        public: false
+        scope: request
+        arguments: ['@templating.helper.assets', '@?vich_uploader.storage', '@?vich_uploader.templating.helper.uploader_helper', '@?imagine.cache.path.resolver']
+        tags:
+            - {name: grid.column.extension}
+    kmgi.common_bundle.grid.column.link:
+        class: KMGi\CommonBundle\Grid\Column\LinkColumn
+        public: false
+        tags:
+            - {name: grid.column.extension}
+#menu helpers:
+#    kmgi.common_bundle.menu.voter.route_voter:
+#        class: KMGi\CommonBundle\Menu\Voter\RouteVoter
+#        tags:
+#            - {name: knp_menu.voter, request: true}
+#Validator services:
+    kmgi.common_bundle.validator.unique_entity:
+        class: KMGi\CommonBundle\Validator\Constraints\UniqueEntityValidator
+        arguments: ['@doctrine']
+        tags:
+            - {name: validator.constraint_validator, alias: kmgi.common_bundle.validator.unique_entity}

@@ -1,0 +1,112 @@
+{% extends 'KMGiCommonBundle:Grid:ajax.html.twig' %}
+
+{% block grid_render_search_block %}
+    {{ grid_search(grid, 'KMGiCommonBundle:Grid:ajax_no_form.html.twig') }}
+{% endblock grid_render_search_block %}
+
+{% block grid %}
+<div class="grid">
+    {{ grid_session_messages(grid) }}
+    {{ grid_render_search_block(grid) }}
+{% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is sameas(false) %}
+    <div id="{{ grid.hash }}" data-action="{{ grid.routeUrl }}" class="{{ grid_class_block(grid) }}">
+        <div class="grid_header">
+        {% if grid.massActions|length > 0 %}
+            {{ grid_actions(grid) }}
+        {% endif %}
+        </div>
+        {% if grid.isPagerSectionVisible %}
+            {{ grid_pager(grid) }}
+        {% endif %}
+        <div class="grid_body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                {% if grid.isTitleSectionVisible %}
+                    {{ grid_titles(grid) }}
+                {% endif %}
+
+                {% if grid.isFilterSectionVisible %}
+                    {{ grid_filters(grid) }}
+                {% endif %}
+                </thead>
+                <tbody>
+                {{ grid_rows(grid) }}
+                </tbody>
+            </table>
+        </div>
+        <div class="grid_footer">
+        {% if grid.isPagerSectionVisible %}
+            {{ grid_pager(grid) }}
+        {% endif %}
+        {% if grid.exports|length > 0 %}
+            {{ grid_exports(grid) }}
+        {% endif %}
+        </div>
+        {% if withjs %}
+            {{ grid_scripts(grid) }}
+        {% endif %}
+    </div>
+{% else %}
+    {{ grid_no_data(grid) }}
+{% endif %}
+</div>
+{% endblock grid %}
+
+{% block grid_actions %}
+<div class="mass-actions clearfix">
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown">
+            {{ 'Select row'|trans }} <span class="caret"></span>
+        </a>
+        <ul class="grid_massactions_helper dropdown-menu">
+            <li><a href="#" class="js-grid-mark-visible" data-grid-id="{{ grid.hash }}" data-state="true">{{ 'Select visible'|trans }}</a></li>
+            <li><a href="#" class="js-grid-mark-visible" data-grid-id="{{ grid.hash }}" data-state="false">{{ 'Deselect visible'|trans }}</a></li>
+            <li><a href="#" class="js-grid-mark-all" data-grid-id="{{ grid.hash }}" data-state="true">{{ 'Select all'|trans }}</a></li>
+            <li><a href="#" class="js-grid-mark-all" data-grid-id="{{ grid.hash }}" data-state="false">{{ 'Deselect all'|trans }}</a></li>
+        </ul>
+    </div>
+    <span class="mass-actions-selected label label-info" data-total="{{ grid.totalCount }}" data-text="{{ 'Selected _s_ rows' | trans }}" id="{{ grid.hash }}_mass_action_selected"></span>
+    {% spaceless %}
+    <div class="grid_massactions input-append pull-right">
+        <label for="{{ grid.hash }}_select_mass_actions" style="float: left; display: inline; margin: 4px 2px 4px 0px;">{{ 'Action'|trans }}</label>
+        <input type="hidden" id="{{ grid.hash }}_mass_action_all" name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]" value="0"/>
+        <select id="{{ grid.hash }}_select_mass_actions" class="span2" name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]" style="width: 200px; margin-right: 4px;">
+            <option value="-1"></option>
+            {% for key, value in grid.massActions %}
+            <option value="{{ key }}">{{ value.title|trans }}</option>
+            {% endfor %}
+        </select>
+        <input class="btn" type="submit" value="{{ 'Submit Action'|trans }}"/>
+    </div>
+    {% endspaceless %}
+</div>
+{% endblock grid_actions %}
+
+{% block grid_search %}
+{% if grid.isFilterSectionVisible %}
+    <div class="grid-search panel panel-default" id="js-grid-search-{{ grid.hash }}" {% if not grid.isFiltered %} style="display: none"{% endif %}>
+        <div class="panel-body">
+            <div id="{{ grid.hash }}_search" class="form-horizontal js-grid-search-form">
+                {% for column in grid.columns if column.visible(true) and column.isFilterable %}
+                    <div class="form-group">
+                        {% set columnTitle = grid.prefixTitle ~ column.title %}
+                        {% if columnTitle == column.id %}
+                            {% set columnTitle = columnTitle | capitalize %}
+                        {% endif %}
+                        {% if column.filterable %}
+                            <label for="{{ grid.hash }}__{{ column.id }}__query__from" class="col-sm-2 control-label">{{ columnTitle|replace('_',' ')|trans }}</label>
+                            <div class="col-sm-10">{{ grid_filter(column, grid, false)|raw }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="grid-search-action form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="submit" class="btn btn-primary grid-search-submit js-grid-submit-search" value="{{ 'Search'|trans }}"/>
+                        <input type="button" class="btn btn-default grid-search-reset js-grid-click-goto-url" value="{{ 'Reset'|trans }}" data-grid-id="{{ grid.hash }}" data-url="{{ grid_url('reset', grid) }}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock grid_search %}

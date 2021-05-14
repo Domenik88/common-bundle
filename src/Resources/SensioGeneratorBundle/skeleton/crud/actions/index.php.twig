@@ -1,0 +1,31 @@
+    /**
+{% block phpdoc_method_header %}
+     * Lists all {{ real_entity }} entities.
+{% endblock phpdoc_method_header %}
+     *
+{% block phpdoc_method_annotations %}
+{% if 'annotation' == format %}
+     * @Route("/", name="{{ route_name_prefix }}")
+{% endif %}
+{% endblock phpdoc_method_annotations %}
+     */
+{% block method_definition %}
+    public function indexAction()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $source = new Entity('{{ bundle }}:{{ real_entity }}');
+        $grid = $this->get('grid');
+        $grid->setSource($source);
+        $rowAction = new RowAction('Edit', '{{ route_name_prefix }}_edit', false, '_self', ['type' => 'pencil']);
+        $grid->addRowAction($rowAction);
+        $rowAction = new RowAction('Delete', '{{ route_name_prefix }}_delete', true, '_self', ['type' => 'trash']);
+        $rowAction->setConfirmMessage($this->get('translator')->trans('Do you want to delete this record?'));
+        $grid->addRowAction($rowAction);
+{% endblock method_body %}
+
+{% block method_return %}
+        return $grid->getGridResponse('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:index.html.twig');
+{% endblock method_return %}
+    }
+

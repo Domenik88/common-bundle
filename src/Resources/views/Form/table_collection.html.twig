@@ -1,0 +1,148 @@
+{% extends 'KMGiCommonBundle:Form:fields.html.twig' %}
+
+{% block collection_widget %}
+{% spaceless %}
+    {% if prototype is defined or form.children | length > 0 %}
+        {% if prototype is defined %}
+            {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+        {% endif %}
+        {% set header_row_form = prototype is defined ? prototype : (form.children | first) %}
+        <table {{ block('widget_container_attributes') }} class="table table-bordered table-striped">
+            <thead>
+                <tr class="grid-row-titles">
+                    <th>#</th>
+                    {% for child in header_row_form %}
+                        {% set label = child.vars.label %}
+                        {% if label is empty %}
+                            {% set label = child.vars.name|humanize %}
+                        {% endif %}
+                        <th>{{ label | trans({}, translation_domain) }}</th>
+                    {% else %}
+                        {% set label = header_row_form.vars.label %}
+                        {% if label is empty %}
+                            {% set label = header_row_form.vars.name|humanize %}
+                        {% endif %}
+                        <th>{{ label | trans({}, translation_domain) }}</th>
+                    {% endfor %}
+                    {% if form.vars.allow_delete %}
+                        <th>{{ 'Actions' | trans({}, translation_domain) }}</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="grid-row-cells no_records"{% if(form | length > 0) %} style="display: none;"{% endif %}>
+                    <td class="last-column last-row" style="text-align: center;" colspan="{{ (header_row_form.children | length ?: 1) + 1 + form.vars.allow_delete }}">{{ form.vars.no_data_message | trans }}</td>
+                </tr>
+                {{ block('form_rows') }}
+            </tbody>
+        </table>
+        {% if form.vars.allow_add and form.vars.show_add_button %}
+            <div class="clearfix">
+                <div class="btn-toolbar pull-right">
+                    <button class="btn {{ form.vars.add_button_class }}"><span class="icon-{{ form.vars.add_button_icon }}"></span> {{ form.vars.add_button_label | trans }}</button>
+                </div>
+            </div>
+        {% endif %}
+            <script type="text/javascript">
+                {% if form.vars.allow_add %}
+                    var {{ id }}_count = 0;
+                {% endif %}
+                jQuery(document).ready(function(){
+                    {% if form.vars.allow_add %}
+                        {{ id }}_count = $('#{{ id }} tr.grid-row-cells').length;
+                        $('.{{ id }}_add_record').on('click', function(e){
+                            e.preventDefault();
+                            $('.nav-tabs a[href="#' + $('#{{ id }}').closest('div.tab-pane').attr('id') + '"]').tab('show');
+                            var prototype = $('#{{ id }}').data('prototype');
+                            var newForm = prototype.replace(/__name__/g, {{ id }}_count++);
+                            $('#{{ id }} .no_records').hide();
+                            $('#{{ id }} tbody').append(newForm);
+                        });
+                    {% endif %}
+                    {% if form.vars.allow_delete %}
+                        $('#{{ id }}').on('click', 'button.remove-row', function(event){
+                            event.preventDefault();
+                            $(this).closest('tr').find('td').fadeOut('slow', function(){
+                                $(this).parent().remove();
+                                if($('#{{ id }} tr.grid-row-cells').length == 1)
+                                {
+                                    $('#{{ id }} .no_records').show();
+                                }
+                            });
+                        });
+                    {% endif %}
+                });
+            </script>
+        {% else %}
+        {{ 'No data' | trans }}
+    {% endif %}
+{% endspaceless %}
+{% endblock collection_widget %}
+
+{% block form_rows %}
+{% spaceless %}
+    {% if table_cell | default(false) %}
+        {% for child in form %}
+            <td>
+                {{ form_row(child) }}
+            </td>
+        {% endfor %}
+    {% else %}
+        {% for child in form %}
+            {{ form_row(child) }}
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{% block form_widget_compound %}
+{% spaceless %}
+    {{ block('form_rows') }}
+    {{ form_rest(form) }}
+{% endspaceless %}
+{% endblock form_widget_compound %}
+
+{% block form_row %}
+{% spaceless %}
+    {% if not form.parent.vars.show_add_button | default(null) is sameas(null) %}
+        <tr class="grid-row-cells"{{ compound ? block('widget_container_attributes') : '' }}>
+            <td>{{ value is empty ? 'New' | trans : (form.vars.name + 1) }}</td>
+            {% if compound %}
+                {{ form_widget(form, {table_cell: true}) }}
+            {% else %}
+                <td>
+                    {{ form_widget(form) }}
+                </td>
+            {% endif %}
+            {% if form.parent.vars.allow_delete %}
+                <td>
+                    <span class="btn-group pull-right">
+                        <button class="btn btn-mini remove-row" type="button" title="{{ 'Delete'|trans }}"><i class="icon-remove"></i></button>
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+        {{ block('choice_widget_expanded') }}
+    {% else %}
+        {{ block('choice_widget_collapsed') }}
+    {% endif %}
+    {{ block('text_hint') }}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {{ block('form_widget_simple_input') }}
+    {{ block('text_hint') }}
+{% endspaceless %}
+{% endblock form_widget_simple %}

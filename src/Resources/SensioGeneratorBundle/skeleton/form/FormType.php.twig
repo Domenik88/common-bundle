@@ -1,0 +1,38 @@
+{% extends 'skeleton/form/FormType.php.twig' %}
+{% block class_body %}
+{% if fields|length > 0 %}
+    /**
+     * {@inheritDoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+        {%- for field in fields %}
+
+            ->add('{{ field }}')
+        {%- endfor %}
+
+        ;
+    }
+{% endif %}
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver
+            ->setDefaults([
+                'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}',
+            ])
+        ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return '{{ form_type_name }}';
+    }
+{% endblock class_body %}

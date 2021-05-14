@@ -1,0 +1,20 @@
+{% block extends %}
+{{ "{% extends '" ~ bundle ~ ":" ~ layout_subfolder ~ ":" ~ layout_filename ~ "' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block body %}" }}
+<div class="head-content">
+    <div class="btn-group pull-right">
+        <a class="btn btn-default js-grid-toggle-searchbox" href="#" data-grid-id="{{ '{{ grid.hash }}' }}"><span class="glyphicon glyphicon-search"></span> {{ "{{ 'Search'|trans }}" }}</a>
+{% if 'new' in actions %}
+        <a class="btn btn-primary" href="{{ "{{ path('"~ route_name_prefix ~"_new') }}" }}"><span class="glyphicon glyphicon-plus"></span> {{ "{{ 'Create a new entry'|trans }}" }}</a>
+{% endif %}
+    </div>
+    <div class="page-header">
+        <h3>{{ "{{'"~ real_entity ~" list'|trans }}" }}</h3>
+    </div>
+</div>
+{{ "{{ grid(grid, 'KMGiCommonBundle:Grid:simple.html.twig') }}" }}
+{{ "{% endblock %}" }}
+{% endblock body %}

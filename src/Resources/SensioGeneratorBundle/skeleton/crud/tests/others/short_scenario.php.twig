@@ -1,0 +1,10 @@
+
+    public function testCompleteScenario()
+    {
+        // Create a new client to browse the application
+        $client = static::createClient();
+
+        // Go to the list view
+        $crawler = $client->request('GET', '/{{ route_prefix }}/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /{{ route_prefix }}/");
+    }

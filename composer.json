@@ -1,0 +1,25 @@
+{
+    "name": "kmgi/common-bundle",
+    "type": "symfony-bundle",
+    "description": "KMGi Common Bundle",
+    "authors": [
+        {
+            "name": "Alex Romanenko",
+            "email": "romanenko.alex.v@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "symfony/framework-bundle": ">=4.0.0",
+        "twig/twig": ">=2.14.0"
+    },
+    "suggest": {
+        "knplabs/knp-menu-bundle" : ">=2.0",
+        "apy/datagrid-bundle": ">=2.0",
+        "vich/uploader-bundle" : ">=1.0",
+        "sensio/generator-bundle": ">=2.0"
+    },
+    "autoload": {
+        "psr-4": { "KMGi\\CommonBundle\\": "src/" }
+    }
+}

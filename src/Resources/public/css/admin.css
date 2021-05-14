@@ -1,0 +1,51 @@
+.tab-content{
+	padding-top: 15px;
+}
+.date .form-control[readonly]:not([data-readonly]):not([disabled]){
+	background-color: #fff;
+	cursor: default;
+}
+
+.grid-pager-count{
+	width: 100px;
+	display: inline-table !important;
+}
+.grid-pager-perpage{
+	width: 100px;
+	display: inline;
+}
+
+.grid-actions-select{
+	width: 150px;
+	display: inline;
+}
+
+.grid-export-select{
+ 	width: 150px;
+	display: inline;
+}
+
+.grid_footer, .grid_header{
+	margin: 0 0 20px 0;
+}
+
+.form-horizontal .has-feedback .validation-select2 .form-control-feedback{
+	top: -3px;
+	right: 30px;
+}
+
+.form-horizontal .has-feedback .validation-select .form-control-feedback{
+	right: 30px;
+}
+
+.form-horizontal .has-feedback .validation-input-group .form-control-feedback{
+	right: 55px;
+}
+
+.form-horizontal .has-feedback .validation-input-group .input-group-addon-first ~ .form-control-feedback{
+	right: 15px;
+}
+
+.form-control-feedback{
+	z-index: 2000 !important;
+}
